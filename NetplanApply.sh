@@ -23,8 +23,8 @@ if [ ! -z $USER ] && [ ! -z $PWD ] && [ ! -z $SERVER ]&& [ ! -z $2 ]; then
 		# Connect to remote node via ssh
 		NETPLAN_APPLY=$(sshpass -p $PWD ssh -o StrictHostKeyChecking=no ${USER}@${SERVER} "
 
-			wget --directory-prefix=${NETPLAN_TEMPLATE_PATH} "https://raw.githubusercontent.com/JanRK/rancher-netplan/main/Netplan.template"
-			wget --directory-prefix=${NETPLAN_TEMPLATE_PATH} "https://raw.githubusercontent.com/JanRK/rancher-netplan/main/nodeCleanup.sh"
+			wget --directory-prefix=${NETPLAN_TEMPLATE_PATH} \"https://raw.githubusercontent.com/JanRK/rancher-netplan/main/Netplan.template\"
+			wget --directory-prefix=${NETPLAN_TEMPLATE_PATH} \"https://raw.githubusercontent.com/JanRK/rancher-netplan/main/nodeCleanup.sh\"
 			chmod +x ${NETPLAN_TEMPLATE_PATH}/nodeCleanup.sh
 	
             # Renaming non standard files
