@@ -6,7 +6,7 @@ USER=$(cat ./username)
 PWD=$(cat ./password)
 SERVER=$1
 
-if [ ! -z $USER ] && [ ! -z $PWD ] && [ ! -z $SERVER ]; then
+if [ ! -z $USER ] && [ ! -z $PWD ] && [ ! -z $SERVER ]&& [ ! -z $2 ]; then
 
 	# Define variables
 	NETPLAN_TEMPLATE_PATH="/tmp"               # Directory to host template file
@@ -73,5 +73,5 @@ if [ ! -z $USER ] && [ ! -z $PWD ] && [ ! -z $SERVER ]; then
 		echo "The server $SERVER is unreachable"
 	fi
 else
-	echo "User or password or server were not inserted as arguments"
+	echo "User, password, server and/or company were not inserted as arguments"
 fi

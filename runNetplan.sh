@@ -36,8 +36,8 @@ then
 
     if [ $1 = "netplan" ]
     then
-        echo curl https://get.acme.sh | -s -- $SERVER $company
-        bash ./NetplanApplyTest.sh $SERVER $company
+        curl https://raw.githubusercontent.com/JanRK/rancher-netplan/main/NetplanApply.sh | -s -- $SERVER $company
+        # bash ./NetplanApplyTest.sh $SERVER $company
     elif [ $1 = "ssh" ]
     then
         echo Connecting to $SERVER. Use credentials ${USER}:${PWD}
