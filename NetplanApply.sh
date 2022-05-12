@@ -65,6 +65,7 @@ if [ ! -z $USER ] && [ ! -z $PWD ] && [ ! -z $SERVER ]&& [ ! -z $2 ]; then
 				echo $PWD | sudo -S netplan generate
 				echo $PWD | sudo -S netplan apply
 			fi
+		echo -e \"Netplan completed\n\"
 	    " </dev/null)
 
 		# Show results of the actions
