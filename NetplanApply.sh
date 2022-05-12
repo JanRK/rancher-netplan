@@ -25,8 +25,7 @@ if [ ! -z $USER ] && [ ! -z $PWD ] && [ ! -z $SERVER ]&& [ ! -z $2 ]; then
 
 			wget --directory-prefix=${NETPLAN_TEMPLATE_PATH} \"https://raw.githubusercontent.com/JanRK/rancher-netplan/main/Netplan.template\"
 			wget --directory-prefix=${NETPLAN_TEMPLATE_PATH} \"https://raw.githubusercontent.com/JanRK/rancher-netplan/main/nodeCleanup.sh\"
-			echo $PWD | sudo chmod +x ${NETPLAN_TEMPLATE_PATH}/nodeCleanup.sh
-	
+				
             # Renaming non standard files
 			FILES=\"\$(find ${NETPLAN_PATH} -type f \( -iname '*.yaml' ! -iname ${NETPLAN_FILE} \) -printf '%f\n')\"
 
