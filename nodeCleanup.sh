@@ -23,7 +23,7 @@ function echoInfo {
 } # Debugging output.
 function docker_restart {
     systemctl stop docker
-    sleep 10
+    sleep 20
     systemctl start docker
 }
 function docker_start { systemctl start docker; }
