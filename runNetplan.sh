@@ -50,5 +50,3 @@ then
 else
 	echo "Write netplan or ssh to run this script"
 fi
-
-
