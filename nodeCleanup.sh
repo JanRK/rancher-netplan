@@ -21,6 +21,14 @@ function echoInfo {
     local args="$@"
     white_brackets $(green_printf "INFO") && echo " ${args}"
 } # Debugging output.
+function addDockerList {
+    DOCKERLIST=/etc/apt/sources.list.d/docker.list
+    if [ ! -f "$DOCKERLIST" ]; then
+        echoInfo "Adding Docker list to Apt"
+        echo "deb http://dkalin-ubr.corp.lego.com/ubuntu/docker/ bionic stable" > $DOCKERLIST
+        wget -qO - http://dkalin-ubr.corp.lego.com/ubuntu/docker/gpg | apt-key add -
+    fi
+}
 function docker_restart {
     systemctl stop docker
     sleep 20
@@ -162,6 +170,8 @@ docker_start
 rmContainers
 # Removes ALL volumes.
 rmVolumes
+# Adds Docker list to Apt
+addDockerList
 # Purges Docker installation
 docker_purge
 # Installs Docker
