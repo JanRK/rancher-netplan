@@ -70,8 +70,9 @@ function docker_root {
     sed -i -e 's@ExecStart=/usr/bin/dockerd -H fd://@ExecStart=/usr/bin/dockerd -g /data/lib/docker -H fd://@g' /lib/systemd/system/docker.service
     docker_stop
     #wait for stopped docker daemon
-    while [[ $(ps aux | grep -i docker | grep -v grep) ]]; do
         echoInfo "Waiting for Docker daemon to stop"
+    while [[ $(ps aux | grep -i docker | grep -v grep) ]]; do
+        echo -n "."
     done
     daemon_reload
     rsync -aqxP /var/lib/docker/ /data/lib/docker
@@ -177,20 +178,20 @@ docker_purge
 # Installs Docker
 docker_install
 # Changes Docker's default from /var/lib/docker to /data/lib/docker
-docker_root
+# docker_root
 # Enables log rotation for Docker
-log_rotation
+# log_rotation
 # Removes all Rancher and Kubernetes related folders.
 # Removes Rancher installation from default installation directory.
-rmLocs
+# rmLocs
 # Unmounts all Rancher and Kubernetes related virtual devices and volumes.
-rmDevs
+# rmDevs
 # Removes metadata database.
-rmMetaDB
+# rmMetaDB
 # Removes Firewall entries related to Rancher or Kubernetes.
-cleanFirewall
+# cleanFirewall
 # Restarts services, to apply previous removals.
-containerd_restart
+# containerd_restart
 # Slowed down Docker restart. Needs a pause, because else it complains about "too quick" restarts.
 docker_restart
 echoInfo "Cleanup completed."
