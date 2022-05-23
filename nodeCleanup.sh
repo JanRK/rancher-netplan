@@ -75,7 +75,7 @@ function docker_root {
     done
     daemon_reload
     rsync -aqxP /var/lib/docker/ /data/lib/docker
-    docker_start
+    # docker_start
     echoInfo "New working dir for Docker! Check below:"
     ps aux | grep -i docker | grep -v grep
 }
@@ -90,7 +90,7 @@ function log_rotation {
           },
           "data-root": "/data/lib/docker"
   }' >>/etc/docker/daemon.json
-    docker_restart
+    # docker_restart
     echoInfo "Docker's log rotation is enabled"
 }
 function rmContainers {
