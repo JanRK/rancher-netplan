@@ -30,9 +30,10 @@ function addDockerList {
     fi
 }
 function docker_restart {
-    systemctl stop docker
-    sleep 20
-    systemctl start docker
+    docker_stop
+    echoInfo "Sleeping 65 seconds to start docker again."
+    sleep 65
+    docker_start
 }
 function docker_start { systemctl start docker; }
 function docker_stop { systemctl stop docker; }
@@ -178,20 +179,20 @@ docker_purge
 # Installs Docker
 docker_install
 # Changes Docker's default from /var/lib/docker to /data/lib/docker
-# docker_root
+docker_root
 # Enables log rotation for Docker
-# log_rotation
+log_rotation
 # Removes all Rancher and Kubernetes related folders.
 # Removes Rancher installation from default installation directory.
-# rmLocs
+rmLocs
 # Unmounts all Rancher and Kubernetes related virtual devices and volumes.
-# rmDevs
+rmDevs
 # Removes metadata database.
-# rmMetaDB
+rmMetaDB
 # Removes Firewall entries related to Rancher or Kubernetes.
-# cleanFirewall
+cleanFirewall
 # Restarts services, to apply previous removals.
-# containerd_restart
+containerd_restart
 # Slowed down Docker restart. Needs a pause, because else it complains about "too quick" restarts.
 docker_restart
 echoInfo "Cleanup completed."
