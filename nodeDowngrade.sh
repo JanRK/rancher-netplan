@@ -30,12 +30,21 @@ function addDockerList {
     fi
 }
 function docker_restart {
-    systemctl stop docker
-    sleep 20
-    systemctl start docker
+    docker_stop
+    echoInfo "Sleeping 5 seconds to start docker again."
+    sleep 5
+    docker_start
 }
-function docker_start { systemctl start docker; }
-function docker_stop { systemctl stop docker; }
+function docker_start {
+    systemctl reset-failed docker.service
+    daemon_reload
+    systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker already started." || systemctl start docker.service
+}
+function docker_stop {
+    systemctl stop docker.socket
+    sleep 5
+    systemctl is-active docker.service >/dev/null 2>&1 && systemctl stop docker.service || echoInfo "Docker.service already stopped."
+}
 function daemon_reload { systemctl daemon-reload; }
 function containerd_restart { systemctl restart containerd; }
 function rmMetaDB { silence "rm -f /var/lib/containerd/io.containerd.metadata.v1.bolt/meta.db"; }
@@ -70,14 +79,15 @@ function docker_root {
     sed -i -e 's@ExecStart=/usr/bin/dockerd -H fd://@ExecStart=/usr/bin/dockerd -g /data/lib/docker -H fd://@g' /lib/systemd/system/docker.service
     docker_stop
     #wait for stopped docker daemon
-    while [[ $(ps aux | grep -i docker | grep -v grep) ]]; do
         echoInfo "Waiting for Docker daemon to stop"
+    while [[ $(ps aux | grep -i docker | grep -v grep) ]]; do
+        echo -n "."
     done
     daemon_reload
     rsync -aqxP /var/lib/docker/ /data/lib/docker
-    docker_start
-    echoInfo "New working dir for Docker! Check below:"
-    ps aux | grep -i docker | grep -v grep
+    # docker_start
+    # echoInfo "New working dir for Docker! Check below:"
+    # ps aux | grep -i docker | grep -v grep
 }
 function log_rotation {
     ## Enabling Docker's log rotation
@@ -90,7 +100,7 @@ function log_rotation {
           },
           "data-root": "/data/lib/docker"
   }' >>/etc/docker/daemon.json
-    docker_restart
+    # docker_restart
     echoInfo "Docker's log rotation is enabled"
 }
 function rmContainers {
