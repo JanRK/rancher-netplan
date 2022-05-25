@@ -36,9 +36,9 @@ function docker_restart {
     docker_start
 }
 function docker_start {
-    systemctl enable docker
     systemctl reset-failed docker
-    systemctl start docker
+    daemon_reload
+    systemctl is-active sshd >/dev/null 2>&1 && echoInfo "Docker already started" || systemctl start docker
 }
 function docker_stop { systemctl stop docker; }
 function daemon_reload { systemctl daemon-reload; }
@@ -65,7 +65,6 @@ function docker_purge {
 function docker_install {
     echoInfo "Docker is installing! Please wait..."
     silence "apt update -y"
-    silence "ln -s /dev/null /etc/systemd/system/docker.service"
     silence "apt install docker-ce -y"
     echoInfo "Docker is successfully installed"
 }
@@ -83,8 +82,8 @@ function docker_root {
     daemon_reload
     rsync -aqxP /var/lib/docker/ /data/lib/docker
     # docker_start
-    echoInfo "New working dir for Docker! Check below:"
-    ps aux | grep -i docker | grep -v grep
+    # echoInfo "New working dir for Docker! Check below:"
+    # ps aux | grep -i docker | grep -v grep
 }
 function log_rotation {
     ## Enabling Docker's log rotation
