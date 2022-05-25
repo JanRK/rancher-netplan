@@ -176,43 +176,31 @@ function rmDevs {
 checkPriv
 # Ensures Docker is actually running.
 docker_start
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started." || echoInfo "Docker stopped"
 # Removes ALL containers.
 rmContainers
 # Removes ALL volumes.
 rmVolumes
 # Adds Docker list to Apt
 addDockerList
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.addDockerList" || echoInfo "Docker stopped"
 # Purges Docker installation
 docker_purge
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.docker_purge" || echoInfo "Docker stopped"
 # Installs Docker
 docker_install
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.docker_install" || echoInfo "Docker stopped"
 # Changes Docker's default from /var/lib/docker to /data/lib/docker
 docker_root
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.docker_root" || echoInfo "Docker stopped"
 # Enables log rotation for Docker
 log_rotation
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.log_rotation" || echoInfo "Docker stopped"
 # Removes all Rancher and Kubernetes related folders.
 # Removes Rancher installation from default installation directory.
 rmLocs
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.rmLocs" || echoInfo "Docker stopped"
 # Unmounts all Rancher and Kubernetes related virtual devices and volumes.
 rmDevs
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.rmDevs" || echoInfo "Docker stopped"
 # Removes metadata database.
 rmMetaDB
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.rmMetaDB" || echoInfo "Docker stopped"
 # Removes Firewall entries related to Rancher or Kubernetes.
 cleanFirewall
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.cleanFirewall" || echoInfo "Docker stopped"
 # Restarts services, to apply previous removals.
 containerd_restart
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.containerd_restart" || echoInfo "Docker stopped"
 # Slowed down Docker restart. Needs a pause, because else it complains about "too quick" restarts.
 docker_restart
-systemctl is-active docker.service >/dev/null 2>&1 && echoInfo "Docker is started.docker_restart" || echoInfo "Docker stopped"
 echoInfo "Cleanup completed."
