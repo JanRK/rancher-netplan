@@ -35,8 +35,9 @@ function docker_restart {
     sleep 65
     docker_start
 }
-function docker_start { 
+function docker_start {
     systemctl enable docker
+    systemctl reset-failed docker
     systemctl start docker
 }
 function docker_stop { systemctl stop docker; }
