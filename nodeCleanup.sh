@@ -35,7 +35,10 @@ function docker_restart {
     sleep 65
     docker_start
 }
-function docker_start { systemctl start docker; }
+function docker_start { 
+    systemctl enable docker
+    systemctl start docker
+}
 function docker_stop { systemctl stop docker; }
 function daemon_reload { systemctl daemon-reload; }
 function containerd_restart { systemctl restart containerd; }
@@ -61,6 +64,7 @@ function docker_purge {
 function docker_install {
     echoInfo "Docker is installing! Please wait..."
     silence "apt update -y"
+    silence "ln -s /dev/null /etc/systemd/system/docker.service"
     silence "apt install docker-ce -y"
     echoInfo "Docker is successfully installed"
 }
