@@ -38,9 +38,13 @@ function docker_restart {
 function docker_start {
     systemctl reset-failed docker
     daemon_reload
-    systemctl is-active sshd >/dev/null 2>&1 && echoInfo "Docker already started" || systemctl start docker
+    systemctl is-active sshd >/dev/null 2>&1 && echoInfo "Docker already started." || systemctl start docker
 }
-function docker_stop { systemctl stop docker; }
+function docker_stop {
+    systemctl stop docker.socket
+    sleep 5
+    systemctl is-active docker.service >/dev/null 2>&1 && systemctl stop docker.service || echoInfo "Docker.service already stopped."
+}
 function daemon_reload { systemctl daemon-reload; }
 function containerd_restart { systemctl restart containerd; }
 function rmMetaDB { silence "rm -f /var/lib/containerd/io.containerd.metadata.v1.bolt/meta.db"; }
