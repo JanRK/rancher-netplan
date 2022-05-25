@@ -31,8 +31,8 @@ function addDockerList {
 }
 function docker_restart {
     docker_stop
-    echoInfo "Sleeping 65 seconds to start docker again."
-    sleep 65
+    echoInfo "Sleeping 5 seconds to start docker again."
+    sleep 5
     docker_start
 }
 function docker_start {
