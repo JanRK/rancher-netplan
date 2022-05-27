@@ -52,7 +52,7 @@ function docker_purge {
     ## Purges Docker installation and /data/lib/docker in addition to default directories
     if [ -x "$(command -v docker)" ]; then
         echoInfo "Docker is present - purging... It takes a while,please wait ..."
-        silence "apt-get purge -y docker-engine docker docker.io docker-ce"
+        silence "apt-get purge -y docker-engine docker docker.io docker-ce docker-ce-cli docker-ce-rootless-extras"
         silence "apt-get autoremove -y --purge docker-engine docker docker.io docker-ce"
         echoInfo "Docker is successfully purged"
     else
@@ -69,7 +69,7 @@ function docker_purge {
 function docker_install {
     echoInfo "Docker is installing! Please wait..."
     silence "apt update -y"
-    apt install docker-ce=5:20.10.15\* docker-ce-cli=5:20.10.15\* docker-ce-rootless-extras=5:20.10.15\* -y
+    apt install docker-ce=5:20.10.15\* docker-ce-cli=5:20.10.15\* docker-ce-rootless-extras=5:20.10.15\* -y --allow-downgrades
     echoInfo "Docker is successfully installed"
 }
 function docker_root {
