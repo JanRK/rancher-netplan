@@ -69,7 +69,7 @@ function docker_purge {
 function docker_install {
     echoInfo "Docker is installing! Please wait..."
     silence "apt update -y"
-    silence "apt install docker-ce=5:20.10.15\* docker-ce-cli=5:20.10.15\* docker-ce-rootless-extras=5:20.10.15\* -y"
+    apt install docker-ce=5:20.10.15\* docker-ce-cli=5:20.10.15\* docker-ce-rootless-extras=5:20.10.15\* -y
     echoInfo "Docker is successfully installed"
 }
 function docker_root {
