@@ -1,5 +1,8 @@
 if ($isMacOS) {
     $psenvpath = $env:home
+} elseif ($isWindows) {
+    $psenvpath = Join-Path -Path $home -ChildPath "AppData/PSEnv"
+    if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
 }
 
 <#
@@ -45,7 +48,7 @@ function Invoke-RancherApi {
 
         $Content = $Response.Content.Replace('"HTTP_PROXY="', '"http_proxy_uppercase="').Replace('"HTTPS_PROXY="', '"https_proxy_uppercase="').Replace('"NO_PROXY="', '"no_proxy_uppercase="')
         $Content = $Response.Content.Replace('"HTTP_PROXY"', '"http_proxy_uppercase"').Replace('"HTTPS_PROXY"', '"https_proxy_uppercase"').Replace('"NO_PROXY"', '"no_proxy_uppercase"')
-        $Content = $Content | ConvertFrom-Json
+        $Content = $Content -replace '""','"empty"' | ConvertFrom-Json
 
         if ($Content.baseType -eq "generateKubeConfigOutput") {
             $Data += $Content.config
@@ -126,6 +129,38 @@ function Get-RancherCluster
     return $cluster
 }
 
+<#
+.SYNOPSIS
+Gets Nodes/VMs from a Rancher cluster
+
+.LINK
+http://sre.com/api
+#>
+function Get-RancherClusterNodes
+{
+	param(
+		[string]$clusterName
+        )
+
+    $clusters = Get-RancherClusters
+
+    if ("" -eq $clusterName) {
+        $clusters | Select-Object name,nodeCount | Sort-Object -Property name | Format-Table
+        while ($clusters.id -notcontains $clusterID) {
+            $clusterName = Read-Host "Type ClusterName"
+            $cluster = $clusters | Where-Object { $_.name -eq $clusterName }
+            $clusterID = $cluster.id
+        }
+    } else {
+        $cluster = $clusters | Where-Object { $_.name -eq $clusterName }
+    }
+
+    $path = "clusters/" + $clusterID + "/nodes"
+    $nodes = Invoke-RancherApi -path $path -method "Get"
+
+    return $nodes
+}
+
 
 <#
 .SYNOPSIS
@@ -181,3 +216,5 @@ function psGetEnv
 		}
 	}
 }
+
+
