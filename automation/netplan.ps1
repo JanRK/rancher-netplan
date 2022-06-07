@@ -215,8 +215,17 @@ function Get-psenvpath
 
     if ($isMacOS) {
         return $env:HOME
-    } elseif ($isWindows) {
-        return (Join-Path -Path $home -ChildPath "AppData/PSEnv")
+    } elseif ($isLinux) {
+        $psenvpath = Join-Path -Path $env:HOME -ChildPath ".secret"
         if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
+        return $psenvpath
+    } elseif ($isWindows) {
+        $psenvpath = Join-Path -Path $home -ChildPath "AppData/PSEnv"
+        if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
+        return 
     }
 }
+
+
+# sshpass -p $PWD ssh -o StrictHostKeyChecking=no ${USER}@${SERVER} 
+
