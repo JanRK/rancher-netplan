@@ -174,7 +174,7 @@ function psSetEnv
 
 		Set-Variable -Name $name -Value $value -Scope global
 		if (!($nofile)) {
-			$value | Export-Clixml -Path (Join-Path (psenvpath) $name.xml)
+			$value | Export-Clixml -Path (Join-Path (psenvpath) ($name + ".xml"))
 		}
 		
 }
