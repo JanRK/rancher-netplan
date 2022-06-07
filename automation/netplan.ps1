@@ -227,5 +227,16 @@ function Get-psenvpath
 }
 
 
+function Run-Sshpass
+{
+    param(
+		[string]$server
+        )
+
+        
+        $user = psGetEnv sshuser
+        $pass = psGetEnv sshpass
+        write-host sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + "@" + $server )
+}
 # sshpass -p $PWD ssh -o StrictHostKeyChecking=no ${USER}@${SERVER} 
 
