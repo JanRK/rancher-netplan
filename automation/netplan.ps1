@@ -214,7 +214,7 @@ function Get-psenvpath
 {
 
     if ($isMacOS) {
-        return $env:home
+        return $env:HOME
     } elseif ($isWindows) {
         return (Join-Path -Path $home -ChildPath "AppData/PSEnv")
         if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
