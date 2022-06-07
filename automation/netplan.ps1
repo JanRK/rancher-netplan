@@ -1,10 +1,3 @@
-if ($isMacOS) {
-    $psenvpath = $env:home
-} elseif ($isWindows) {
-    $psenvpath = Join-Path -Path $home -ChildPath "AppData/PSEnv"
-    if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
-}
-
 <#
 .SYNOPSIS
 Easy way to call the Rancher API
@@ -181,7 +174,7 @@ function psSetEnv
 
 		Set-Variable -Name $name -Value $value -Scope global
 		if (!($nofile)) {
-			$value | Export-Clixml -Path $psenvpath/$name.xml
+			$value | Export-Clixml -Path (Join-Path (psenvpath) $name.xml)
 		}
 		
 }
@@ -200,7 +193,7 @@ function psGetEnv
 		[string]$name
         )
 
-	$fileLocation = ( Join-Path $psenvpath ($name + ".xml") )
+	$fileLocation = ( Join-Path (psenvpath) ($name + ".xml") )
 	if ( Test-Path $fileLocation ) {
 		return ( Import-Clixml -Path $fileLocation )
 	} else {
@@ -217,4 +210,13 @@ function psGetEnv
 	}
 }
 
+function Get-psenvpath
+{
 
+    if ($isMacOS) {
+        return $env:home
+    } elseif ($isWindows) {
+        return (Join-Path -Path $home -ChildPath "AppData/PSEnv")
+        if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
+    }
+}
