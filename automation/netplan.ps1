@@ -222,7 +222,7 @@ function Get-psenvpath
     } elseif ($isWindows) {
         $psenvpath = Join-Path -Path $home -ChildPath "AppData/PSEnv"
         if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
-        return 
+        return $psenvpath
     }
 }
 
