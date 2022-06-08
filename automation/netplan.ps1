@@ -282,3 +282,19 @@ function Get-DualIPCluster
 }
 
 # Add-DhcpServerv4Reservation -ComputerName "huadhcp-001.corp.lego.com" -ScopeId 10.137.202.0 -IPAddress 10.137.202.98 -ClientId "00-50-56-85-0d-99" -Name huaapp-kw9.corp.lego.com
+
+function Set-DualIPClusterNetplan
+{
+    param(
+		[string]$clusterName
+        )
+
+    $clusterInfo = @()
+    $nodes = Get-RancherClusterNodes $clusterName
+    foreach ($node in $nodes) {
+        Write-Host "Running Netplan on" $node.nodeName
+        $netplanResult += bash ./NetplanApply.sh $node.ipAddress (psGetEnv "company")
+    }
+    Read-Host "pause"
+    return $netplanResult
+}
