@@ -146,6 +146,7 @@ function Get-RancherClusterNodes
         }
     } else {
         $cluster = $clusters | Where-Object { $_.name -eq $clusterName }
+        $clusterID = $cluster.id
     }
 
     $path = "clusters/" + $clusterID + "/nodes"
