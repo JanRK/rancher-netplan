@@ -242,7 +242,8 @@ function Run-Sshpass
         $pass = psGetEnv sshpass
 
         if ($action -eq "ipInfo") {
-            sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
+            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
+            return $ipInfo
         }
 }
 
@@ -262,7 +263,7 @@ function Calculate-NetworkSettings
     $ipSplit = $ipAddress.split('.')
     $ipSplit[3] = 0
     $scopeId = $ipSplit -join "."
-    return "Add-DhcpServerv4Reservation -ComputerName huadhcp-001.corp.lego.com -ScopeId $scopeId -IPAddress $ip -ClientId $mac -Name $dnsName"
+    return "Add-DhcpServerv4Reservation -ComputerName huadhcp-001.corp.lego.com -ScopeId $scopeId -IPAddress $ipAddress -ClientId $mac -Name $dnsName"
 }
 
 
