@@ -241,7 +241,7 @@ function Run-Sshpass
         $pass = psGetEnv sshpass
 
         if ($action -eq "ipInfo") {
-            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
+            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160;hostname --fqdn"
             return $ipInfo
         }
 }
@@ -258,11 +258,11 @@ function Calculate-NetworkSettings
     $subnetMask = (($ipConfig | select-string "inet " -NoEmphasis -Raw).split(" ") | select-string "/" -NoEmphasis -Raw).split("/")[1]
     $dnsLookup = [System.Net.Dns]::GetHostEntry($server)
     $dnsName = $dnsLookup.HostName
-    $ipAddress = $dnsLookup.AddressList.IPAddressToString
+    $ipAddress = $server
     $ipSplit = $ipAddress.split('.')
     $ipSplit[3] = 0
     $scopeId = $ipSplit -join "."
-    return "Add-DhcpServerv4Reservation -ComputerName huadhcp-001.corp.lego.com -ScopeId $scopeId -IPAddress $ipAddress -ClientId $mac -Name $dnsName"
+    return "Add-DhcpServerv4Reservation -ComputerName huadhcp-001.corp.lego.com -ScopeId $scopeId -IPAddress $server -ClientId $mac -Name $dnsName"
 }
 
 
