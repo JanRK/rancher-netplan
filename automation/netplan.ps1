@@ -293,7 +293,7 @@ function Set-DualIPClusterNetplan
     $nodes = Get-RancherClusterNodes $clusterName
     foreach ($node in $nodes) {
         Write-Host "Running Netplan on" $node.nodeName
-        $netplanResult += bash ./NetplanApply.sh $node.ipAddress (psGetEnv "company")
+        $netplanResult += bash ./netplan.sh $node.ipAddress (psGetEnv "company")
     }
     Read-Host "pause"
     return $netplanResult
