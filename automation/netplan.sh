@@ -22,6 +22,8 @@ if [ ! -z $USER ] && [ ! -z $PWD ] && [ ! -z $SERVER ]&& [ ! -z $2 ]; then
 		# Connect to remote node via ssh
 		NETPLAN_APPLY=$(sshpass -p $PWD ssh -o StrictHostKeyChecking=no ${USER}@${SERVER} "
 
+			wget --quiet --directory-prefix=${NETPLAN_TEMPLATE_PATH} \"https://raw.githubusercontent.com/JanRK/rancher-netplan/main/Netplan.template\"
+
             # Removing non standard files
 			FILES=\"\$(find ${NETPLAN_PATH} -type f \( -iname '*' ! -iname ${NETPLAN_FILE} \) -printf '%f\n')\"
 
