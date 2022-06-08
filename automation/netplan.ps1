@@ -255,7 +255,7 @@ function Calculate-NetworkSettings
     $subnetMask = (($ipConfig | select-string "inet " -NoEmphasis -Raw).split(" ") | select-string "/" -NoEmphasis -Raw).split("/")[1]
     $dnsLookup = [System.Net.Dns]::GetHostEntry($server)
     $dnsName = $dnsLookup.HostName
-    $ipAddress = $dnsLookup.AddressList
+    $ipAddress = $dnsLookup.AddressList.IPAddressToString
     $ipSplit = $ipAddress.split('.')
     $ipSplit[3] = 0
     $scopeId = $ipSplit -join "."
