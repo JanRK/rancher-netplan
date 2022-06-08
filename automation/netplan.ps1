@@ -237,12 +237,11 @@ function Run-Sshpass
         [string]$action = "ipInfo"
         )
 
-        
         $user = psGetEnv sshuser
         $pass = psGetEnv sshpass
 
         if ($action -eq "ipInfo") {
-            Calculate-NetworkSettings $node.ipAddress            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
+            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
             return $ipInfo
         }
 }
@@ -276,6 +275,7 @@ function Get-DualIPCluster
     $clusterInfo = @()
     $nodes = Get-RancherClusterNodes $clusterName
     foreach ($node in $nodes) {
+        Write-Host "Getting IP info from" $node.nodeName
         $clusterInfo += Calculate-NetworkSettings $node.ipAddress
     }
     return $clusterInfo
