@@ -289,7 +289,7 @@ function Set-DualIPClusterNetplan
 		[string]$clusterName
         )
 
-    $clusterInfo = @()
+    $netplanResult = @()
     $nodes = Get-RancherClusterNodes $clusterName
     foreach ($node in $nodes) {
         Write-Host "Running Netplan on" $node.nodeName
