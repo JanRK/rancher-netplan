@@ -214,7 +214,9 @@ function Get-psenvpath
 {
 
     if ($isMacOS) {
-        return $env:HOME
+        $psenvpath = Join-Path -Path $env:HOME -ChildPath ".secret"
+        if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
+        return $psenvpath
     } elseif ($isLinux) {
         $psenvpath = Join-Path -Path $env:HOME -ChildPath ".secret"
         if (!(Test-Path "$psenvpath")) {New-Item -Path "$psenvpath" -ItemType "directory"}
@@ -263,6 +265,16 @@ function Calculate-NetworkSettings
 }
 
 
+function Get-DualIPCluster
+{
+    param(
+		[string]$clusterName
+        )
+
+    $nodes = Get-RancherClusterNodes $clusterName
+    foreach ($node in $nodes) {
+
+    }
 
 
 # Add-DhcpServerv4Reservation -ComputerName "huadhcp-001.corp.lego.com" -ScopeId 10.137.202.0 -IPAddress 10.137.202.98 -ClientId "00-50-56-85-0d-99" -Name huaapp-kw9.corp.lego.com
