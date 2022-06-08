@@ -230,13 +230,39 @@ function Get-psenvpath
 function Run-Sshpass
 {
     param(
-		[string]$server
+		[string]$server,
+        [string]$action = "ipInfo"
         )
 
         
         $user = psGetEnv sshuser
         $pass = psGetEnv sshpass
-        sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
-}
-# sshpass -p $PWD ssh -o StrictHostKeyChecking=no ${USER}@${SERVER} 
 
+        if ($action -eq "ipInfo") {
+            sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
+        }
+}
+
+
+function Calculate-NetworkSettings
+{
+    param(
+		[string]$server
+        )
+
+    $ipConfig = Run-Sshpass -server $server -action "ipInfo"
+    $mac = ($ipConfig | select-string "link/ether" -NoEmphasis -Raw).split(" ")[5] -replace ":","-"
+    $subnetMask = (($ipConfig | select-string "inet " -NoEmphasis -Raw).split(" ") | select-string "/" -NoEmphasis -Raw).split("/")[1]
+    $dnsLookup = [System.Net.Dns]::GetHostEntry($server)
+    $dnsName = $dnsLookup.HostName
+    $ipAddress = $dnsLookup.AddressList
+    $ipSplit = $ipAddress.split('.')
+    $ipSplit[3] = 0
+    $scopeId = $ipSplit -join "."
+    return "Add-DhcpServerv4Reservation -ComputerName huadhcp-001.corp.lego.com -ScopeId $scopeId -IPAddress $ip -ClientId $mac -Name $dnsName"
+}
+
+
+
+
+# Add-DhcpServerv4Reservation -ComputerName "huadhcp-001.corp.lego.com" -ScopeId 10.137.202.0 -IPAddress 10.137.202.98 -ClientId "00-50-56-85-0d-99" -Name huaapp-kw9.corp.lego.com
