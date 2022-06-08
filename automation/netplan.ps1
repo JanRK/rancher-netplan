@@ -256,12 +256,16 @@ function Calculate-NetworkSettings
     $ipConfig = Run-Sshpass -server $server -action "ipInfo"
     $mac = ($ipConfig | select-string "link/ether" -NoEmphasis -Raw).split(" ")[5] -replace ":","-"
     $subnetMask = (($ipConfig | select-string "inet " -NoEmphasis -Raw).split(" ") | select-string "/" -NoEmphasis -Raw).split("/")[1]
-    $dnsLookup = [System.Net.Dns]::GetHostEntry($server)
-    $dnsName = $dnsLookup.HostName
+    # $dnsLookup = [System.Net.Dns]::GetHostEntry($server)
+    $dnsName = $ipConfig | Select-Object -Last 1
     $ipAddress = $server
-    $ipSplit = $ipAddress.split('.')
-    $ipSplit[3] = 0
-    $scopeId = $ipSplit -join "."
+    if ($subnetMask -ne "24") {
+        $scopeId = "SubnetMask=" + $subnetMask + "-DO-NOT-RUN"
+    } else {
+        $ipSplit = $ipAddress.split('.')
+        $ipSplit[3] = 0
+        $scopeId = $ipSplit -join "."
+    }
     return "Add-DhcpServerv4Reservation -ComputerName huadhcp-001.corp.lego.com -ScopeId $scopeId -IPAddress $server -ClientId $mac -Name $dnsName"
 }
 
@@ -296,7 +300,7 @@ function Set-DualIPClusterNetplan
     psGetEnv sshpass | Out-File ./password
 
     foreach ($node in $nodes) {
-        Write-Host "Running Netplan on" $node.nodeName
+        Write-Host "Running Netplan on" $node.nodeName -ForegroundColor Green
         $netplanResult += bash ./netplan.sh $node.ipAddress (psGetEnv "company")
         Read-Host "pause"
     }
