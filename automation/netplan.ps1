@@ -242,7 +242,7 @@ function Run-Sshpass
         $pass = psGetEnv sshpass
 
         if ($action -eq "ipInfo") {
-            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
+            Calculate-NetworkSettings $node.ipAddress            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160"
             return $ipInfo
         }
 }
@@ -273,10 +273,12 @@ function Get-DualIPCluster
 		[string]$clusterName
         )
 
+    $clusterInfo = @()
     $nodes = Get-RancherClusterNodes $clusterName
     foreach ($node in $nodes) {
-
+        $clusterInfo += Calculate-NetworkSettings $node.ipAddress
     }
+    return $clusterInfo
 }
 
 # Add-DhcpServerv4Reservation -ComputerName "huadhcp-001.corp.lego.com" -ScopeId 10.137.202.0 -IPAddress 10.137.202.98 -ClientId "00-50-56-85-0d-99" -Name huaapp-kw9.corp.lego.com
