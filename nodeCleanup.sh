@@ -93,6 +93,13 @@ function docker_root {
 function log_rotation {
     ## Enabling Docker's log rotation
     echoInfo "Enabling Docker's log rotation"
+    if test -f "/etc/docker/daemon.json"
+    then
+        echoInfo "   Existing daemon.json found."
+    else
+        echoInfo "   Existing daemon.json not found, creating."
+        touch /etc/docker/daemon.json
+    fi
     echo '{
           "log-driver": "json-file",
           "log-opts": {
@@ -100,7 +107,7 @@ function log_rotation {
               "max-file": "3"
           },
           "data-root": "/data/lib/docker"
-  }' >/etc/docker/daemon.json
+  }' >>/etc/docker/daemon.json
     # docker_restart
     echoInfo "Docker's log rotation is enabled"
 }
