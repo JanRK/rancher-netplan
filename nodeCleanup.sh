@@ -70,6 +70,7 @@ function docker_install {
     echoInfo "Docker is installing! Please wait..."
     silence "apt update -y"
     silence "apt install docker-ce -y"
+    sleep 5
     echoInfo "Docker is successfully installed"
 }
 function docker_root {
