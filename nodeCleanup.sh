@@ -100,7 +100,7 @@ function log_rotation {
               "max-file": "3"
           },
           "data-root": "/data/lib/docker"
-  }' >>/etc/docker/daemon.json
+  }' >/etc/docker/daemon.json
     # docker_restart
     echoInfo "Docker's log rotation is enabled"
 }
