@@ -279,7 +279,7 @@ function Get-DualIPCluster
     $clusterInfo = @()
     $nodes = Get-RancherClusterNodes $clusterName
     foreach ($node in $nodes) {
-        Write-Host "Getting IP info from" $node.nodeName
+        Write-Host "Getting IP info from" $node.nodeName -ForegroundColor Green
         $clusterInfo += Calculate-NetworkSettings $node.ipAddress
     }
     return $clusterInfo
