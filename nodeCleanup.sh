@@ -52,8 +52,8 @@ function docker_purge {
     ## Purges Docker installation and /data/lib/docker in addition to default directories
     if [ -x "$(command -v docker)" ]; then
         echoInfo "Docker is present - purging... It takes a while,please wait ..."
-        silence "apt-get purge -y docker-engine docker docker.io docker-ce"
-        silence "apt-get autoremove -y --purge docker-engine docker docker.io docker-ce"
+        silence "apt-get purge -y docker-engine docker docker.io docker-ce docker-ce-cli docker-ce-rootless-extras"
+        silence "apt-get autoremove -y --purge docker-engine docker docker.io docker-ce docker-ce-cli docker-ce-rootless-extras"
         echoInfo "Docker is successfully purged"
     else
         echoInfo "Docker is not present - nothing to purge"
