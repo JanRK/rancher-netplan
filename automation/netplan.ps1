@@ -241,7 +241,7 @@ function Run-Sshpass
         $pass = psGetEnv sshpass
 
         if ($action -eq "ipInfo") {
-            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160;hostname --fqdn"
+            $ipInfo = sshpass -p $pass ssh -o StrictHostKeyChecking=no ($user + '@' + $server ) "ip address show dev ens160;hostname --fqdn" 2> $null
             return $ipInfo
         }
 }
