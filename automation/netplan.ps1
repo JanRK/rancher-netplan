@@ -266,7 +266,7 @@ function Calculate-NetworkSettings
         $ipSplit[3] = 0
         $scopeId = $ipSplit -join "."
     }
-    return "Add-DhcpServerv4Reservation -ComputerName huadhcp-001.corp.lego.com -ScopeId $scopeId -IPAddress $server -ClientId $mac -Name $dnsName"
+    return "Add-DhcpServerv4Reservation -ComputerName `$dhcpServer -ScopeId $scopeId -IPAddress $server -ClientId $mac -Name $dnsName"
 }
 
 
@@ -285,7 +285,6 @@ function Get-DualIPCluster
     return $clusterInfo
 }
 
-# Add-DhcpServerv4Reservation -ComputerName "huadhcp-001.corp.lego.com" -ScopeId 10.137.202.0 -IPAddress 10.137.202.98 -ClientId "00-50-56-85-0d-99" -Name huaapp-kw9.corp.lego.com
 
 function Set-DualIPClusterNetplan
 {
